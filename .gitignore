@@ -1,3 +1,4 @@
 *.pyc
 build/*
+dist/*
 netdnarws.egg-info/*
