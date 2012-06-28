@@ -33,7 +33,7 @@ class NetDNA(object):
                                    )
 
     def _response_as_json(self, method, uri, **kwargs):
-        if kwargs.get('debug', False):
+        if kwargs.pop('debug', False):
             print "Making %s request to %s\n" % (method.upper(), self._get_url(uri))
         response = getattr(self.client, method)(self._get_url(uri), **kwargs)
         response_json = json.loads(response.content)
