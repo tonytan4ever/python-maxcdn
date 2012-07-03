@@ -50,8 +50,8 @@ class NetDNA(object):
                                )
         except TypeError:
             raise Exception(
-              "%d: No Error information supplied by the server",
-              response.status_code
+              "%d: No Error information supplied by the server" % (
+              response.status_code,)
             )
 
         return response.json
