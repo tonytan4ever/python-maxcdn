@@ -1,5 +1,3 @@
-import json
-
 import requests
 from oauth_hook import OAuthHook
 
@@ -16,33 +14,40 @@ class NetDNAOAuthHook(OAuthHook):
 class NetDNA(object):
 
     def __init__(self, company_alias, key, secret,
-                 server='rws.netdna.com', **kwargs):
+                 server='rws.netdna.com', secure_connection=True, **kwargs):
         self.company_alias = company_alias
         self.server = server
+        self.secure_connection = secure_connection
         self.client = requests.session(
                         hooks={
                           'pre_request': NetDNAOAuthHook(key, secret, **kwargs)
                         }
                       )
 
+    @property
+    def _connection_type(self):
+        if self.secure_connection:
+            return "https"
+        return "http"
+
     def _get_url(self, uri):
-        return "https://%s/%s%s" % (
-                                     self.server,
-                                     self.company_alias,
-                                     uri
-                                   )
+        return "%s://%s/%s%s" % (
+                                  self._connection_type,
+                                  self.server,
+                                  self.company_alias,
+                                  uri
+                                )
 
     def _response_as_json(self, method, uri, **kwargs):
         if kwargs.pop('debug', False):
             print "Making %s request to %s\n" % (method.upper(), self._get_url(uri))
         response = getattr(self.client, method)(self._get_url(uri), **kwargs)
-        response_json = json.loads(response.content)
         if response.status_code != 200:
             raise Exception("%d: %s" % (
                              response.status_code,
-                             response_json['error']['message'])
+                             response.json['error']['message'])
                            )
-        return response_json
+        return response.json
 
     def get(self, uri, **kwargs):
         return self._response_as_json("get", uri, **kwargs)
