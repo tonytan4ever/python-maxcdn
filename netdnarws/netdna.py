@@ -42,11 +42,18 @@ class NetDNA(object):
         if kwargs.pop('debug', False):
             print "Making %s request to %s\n" % (method.upper(), self._get_url(uri))
         response = getattr(self.client, method)(self._get_url(uri), **kwargs)
-        if response.status_code != 200:
-            raise Exception("%d: %s" % (
-                             response.status_code,
-                             response.json['error']['message'])
-                           )
+        try:
+            if response.status_code != 200:
+                raise Exception("%d: %s" % (
+                                 response.status_code,
+                                 response.json['error']['message'])
+                               )
+        except TypeError:
+            raise Exception(
+              "%d: No Error information supplied by the server",
+              response.status_code
+            )
+
         return response.json
 
     def get(self, uri, **kwargs):
