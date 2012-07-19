@@ -46,21 +46,22 @@ class NetDNA(object):
     def _get_content_length_header(self, data):
         return {'Content-Length': str(self._get_content_length(data))}
 
-    def _response_as_json(self, method, uri, *args, **kwargs):
+    def _response_as_json(self, method, uri, debug=False,
+          debug_json=False, debug_request=False, override_headers=False,
+          *args, **kwargs):
+        import ipdb; ipdb.set_trace()
         headers = None
-        debug_json = kwargs.pop('debug_json', False)
-        debug_request = kwargs.pop('debug_request', False)
 
-        if kwargs.pop('debug', False):
+        if debug:
             print "Making %s request to %s\n" % (method.upper(),
                                                  self._get_url(uri))
-        if kwargs.pop('override_headers', False):
+        if override_headers:
              headers = self._get_content_length_header(
                kwargs.get('data', None))
 
         response = getattr(self.client, method)(
                      self._get_url(uri),
-                     headers = headers
+                     headers=headers,
                      *args, **kwargs
                    )
 
