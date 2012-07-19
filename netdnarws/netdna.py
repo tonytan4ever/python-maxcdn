@@ -49,7 +49,6 @@ class NetDNA(object):
     def _response_as_json(self, method, uri, debug=False,
           debug_json=False, debug_request=False, override_headers=False,
           *args, **kwargs):
-        import ipdb; ipdb.set_trace()
         headers = None
 
         if debug:
