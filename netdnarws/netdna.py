@@ -54,9 +54,13 @@ class NetDNA(object):
         if debug:
             print "Making %s request to %s\n" % (method.upper(),
                                                  self._get_url(uri))
+        data = kwargs.get('data', None)
+
         if override_headers:
-             headers = self._get_content_length_header(
-               kwargs.get('data', None))
+             headers = self._get_content_length_header(data)
+
+        if data and 'params' not in kwargs.keys():
+            kwargs['params'] = data
 
         response = getattr(self.client, method)(
                      self._get_url(uri),
@@ -69,7 +73,7 @@ class NetDNA(object):
 
         if not debug_json:
             try:
-                if response.status_code != 200:
+                if response.status_code in xrange(100, 401):
                     raise Exception("%d: %s" % (
                                      response.status_code,
                                      response.json['error']['message'])
