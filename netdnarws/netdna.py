@@ -95,5 +95,8 @@ class NetDNA(object):
     def put(self, uri, data=dict(), **kwargs):
         return self._response_as_json("put", uri, data=data, **kwargs)
 
+    def patch(self, uri, data=dict(), **kwargs):
+        return self._response_as_json("patch", uri, data=data, **kwargs)
+
     def delete(self, uri, **kwargs):
         return self._response_as_json("delete", uri, **kwargs)
