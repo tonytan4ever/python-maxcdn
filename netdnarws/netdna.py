@@ -73,7 +73,7 @@ class NetDNA(object):
 
         if not debug_json:
             try:
-                if response.status_code in xrange(100, 401):
+                if response.status_code not in xrange(100, 401):
                     raise Exception("%d: %s" % (
                                      response.status_code,
                                      response.json['error']['message'])
