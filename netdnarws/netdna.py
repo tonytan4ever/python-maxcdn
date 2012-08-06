@@ -1,4 +1,4 @@
-import requests
+import requests_netdna as requests
 from oauth_hook import OAuthHook
 
 
@@ -65,6 +65,7 @@ class NetDNA(object):
         response = getattr(self.client, method)(
                      self._get_url(uri),
                      headers=headers,
+                     quote_plus=True,
                      *args, **kwargs
                    )
 
