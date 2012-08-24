@@ -13,7 +13,7 @@ api.get("/account.json")
 ```
 
 ## Methods
-It has support for GET, POST, PUT and DELETE ouath signed requests.
+It has support for GET, POST, PUT and DELETE OAuth signed requests.
 
 Every request can take an optional debug parameter.
 ```python
