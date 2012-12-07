@@ -1,5 +1,10 @@
 # NetDNA REST Web Services Python Client
 
+## Prerequisites 
+
+`sudo pip install requests`
+`sudo pip install certifi`
+
 ## Installation
 `sudo pip install netdnarws`
 
