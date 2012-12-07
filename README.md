@@ -3,6 +3,7 @@
 ## Prerequisites 
 
 `sudo pip install requests`
+
 `sudo pip install certifi`
 
 ## Installation
