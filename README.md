@@ -19,7 +19,7 @@ api = NetDNA("myalias", "consumer_key", "consumer_secret")
 api.get("/account.json")
 
 # Create Pull Zone
-api.post("/zones/pull.json", {'name': 'mypullzone', 'url': 'http://yourorigin.com'})
+api.post("/zones/pull.json", {'name': 'mypullzone', 'url': 'http://yourorigin.com', 'compress': '1'})
 ```
 
 ## Methods
