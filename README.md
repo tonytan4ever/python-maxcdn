@@ -15,7 +15,11 @@ from netdnarws import NetDNA
 
 api = NetDNA("myalias", "consumer_key", "consumer_secret")
 
+# Get Account Info
 api.get("/account.json")
+
+# Create Pull Zone
+api.post("/zones/pull", {'name': 'mypullzone', 'url': 'http://yourorigin.com'})
 ```
 
 ## Methods
