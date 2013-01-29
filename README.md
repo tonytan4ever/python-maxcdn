@@ -20,10 +20,13 @@ api.get("/account.json")
 
 # Create Pull Zone
 api.post("/zones/pull.json", {'name': 'mypullzone', 'url': 'http://yourorigin.com', 'compress': '1'})
+
+# Update Pull Zone
+api.put("/zones/pull.json/12345", {'url': 'http://neworigin.com'})
 ```
 
 ## Methods
-It has support for GET, POST, PUT and DELETE OAuth signed requests.
+It has support for `GET`, `POST`, `PUT` and `DELETE` OAuth signed requests.
 
 Every request can take an optional debug parameter.
 ```python
