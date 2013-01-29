@@ -23,6 +23,10 @@ api.post("/zones/pull.json", {'name': 'mypullzone', 'url': 'http://yourorigin.co
 
 # Update Pull Zone
 api.put("/zones/pull.json/12345", {'url': 'http://neworigin.com'})
+
+# Purge All Cache
+api.delete("/zones/pull.json/77573/cache")
+
 ```
 
 ## Methods
