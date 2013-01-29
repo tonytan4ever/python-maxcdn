@@ -25,7 +25,10 @@ api.post("/zones/pull.json", {'name': 'mypullzone', 'url': 'http://yourorigin.co
 api.put("/zones/pull.json/12345", {'url': 'http://neworigin.com'})
 
 # Purge All Cache
-api.delete("/zones/pull.json/77573/cache")
+api.delete("/zones/pull.json/12345/cache")
+
+# Purge File
+api.delete("/zones/pull.json/77573/cache", data={'file': '/my-file.png'})
 
 ```
 
