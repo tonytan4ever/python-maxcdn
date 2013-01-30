@@ -1,5 +1,11 @@
 # NetDNA REST Web Services Python Client
 
+## Prerequisites 
+
+`sudo pip install requests`
+
+`sudo pip install certifi`
+
 ## Installation
 `sudo pip install netdnarws`
 
@@ -9,11 +15,25 @@ from netdnarws import NetDNA
 
 api = NetDNA("myalias", "consumer_key", "consumer_secret")
 
+# Get Account Info
 api.get("/account.json")
+
+# Create Pull Zone
+api.post("/zones/pull.json", {'name': 'mypullzone', 'url': 'http://yourorigin.com', 'compress': '1'})
+
+# Update Pull Zone
+api.put("/zones/pull.json/12345", {'url': 'http://neworigin.com'})
+
+# Purge All Cache
+api.delete("/zones/pull.json/12345/cache")
+
+# Purge File
+api.delete("/zones/pull.json/77573/cache", data={'file': '/my-file.png'})
+
 ```
 
 ## Methods
-It has support for GET, POST, PUT and DELETE ouath signed requests.
+It has support for `GET`, `POST`, `PUT` and `DELETE` OAuth signed requests.
 
 Every request can take an optional debug parameter.
 ```python
