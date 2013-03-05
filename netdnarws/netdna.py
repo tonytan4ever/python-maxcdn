@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import re
 from requests import Request, Session
 from oauthlib.oauth1 import Client, SIGNATURE_TYPE_QUERY, SIGNATURE_TYPE_BODY
-from oauthlib.oauth1.rfc5849 import CONTENT_TYPE_FORM_URLENCODED
 
 
 class NetDNA(object):
