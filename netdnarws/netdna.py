@@ -1,14 +1,9 @@
-import requests_netdna as requests
-from oauth_hook import OAuthHook
+from __future__ import unicode_literals
 
-
-class NetDNAOAuthHook(OAuthHook):
-
-    def __init__(self, consumer_key, consumer_secret, token=None,
-                 token_secret=None, header_auth=True, **kwargs):
-        super(NetDNAOAuthHook, self).__init__(token, token_secret,
-                                              consumer_key, consumer_secret,
-                                              header_auth)
+import re
+from requests import Request, Session
+from oauthlib.oauth1 import Client, SIGNATURE_TYPE_QUERY, SIGNATURE_TYPE_BODY
+from oauthlib.oauth1.rfc5849 import CONTENT_TYPE_FORM_URLENCODED
 
 
 class NetDNA(object):
@@ -18,11 +13,12 @@ class NetDNA(object):
         self.company_alias = company_alias
         self.server = server
         self.secure_connection = secure_connection
-        self.client = requests.session(
-                        hooks={
-                          'pre_request': NetDNAOAuthHook(key, secret, **kwargs)
-                        }
-                      )
+        self.client = Session()
+        self.oauth_url = Client(key, client_secret=secret,
+                                 signature_type=SIGNATURE_TYPE_QUERY, **kwargs)
+        self.oauth_header = Client(key, client_secret=secret, **kwargs)
+        self.oauth_body = Client(key, client_secret=secret,
+                                  signature_type=SIGNATURE_TYPE_BODY, **kwargs)
 
     @property
     def _connection_type(self):
@@ -40,11 +36,51 @@ class NetDNA(object):
 
     def _get_content_length(self, data):
         if data:
-            return len(requests.models.Request._encode_params(data))
+            return len(Request._encode_params(data))
         return 0
 
     def _get_content_length_header(self, data):
         return {'Content-Length': str(self._get_content_length(data))}
+
+    def _normalize_signature(self, authorization, other):
+        nonce_matcher = re.compile('oauth_nonce="?(\d+)"?')
+        nonce = nonce_matcher.search(authorization).groups()[0]
+
+        timestamp_matcher = re.compile('oauth_timestamp="?(\d+)"?')
+        timestamp = timestamp_matcher.search(authorization).groups()[0]
+
+        signature_matcher = re.compile('oauth_signature="?([%a-zA-Z0-9]+)"?')
+        signature = signature_matcher.search(authorization).groups()[0]
+
+        return other.replace(
+                 nonce_matcher.search(other).groups()[0],
+                 nonce
+               ).replace(
+                 timestamp_matcher.search(other).groups()[0],
+                 timestamp
+               ).replace(
+                 signature_matcher.search(other).groups()[0],
+                 signature
+               ).replace('&&', '&')
+
+    def _sign_request(self, url, method='GET', body=None, headers=None):
+        signed_url = self.oauth_url.sign(url, method,
+                                         body=body, headers=headers)[0]
+        signed_headers = self.oauth_header.sign(url, method,
+                                                body=body, headers=headers)[1]
+        signed_body = self.oauth_body.sign(url, method,
+                                           body=body, headers=headers)[2]
+
+        auth = signed_headers['Authorization'] if body is None else signed_body
+
+        signed_url = self._normalize_signature(auth, signed_url)
+        signed_body = self._normalize_signature(auth, signed_body)
+        signed_headers['Authorization'] = self._normalize_signature(
+                                            auth,
+                                            signed_headers['Authorization']
+                                          )
+
+        return signed_url, signed_headers, signed_body
 
     def _response_as_json(self, method, uri, debug=False,
           debug_json=False, debug_request=False, override_headers=False,
@@ -62,12 +98,33 @@ class NetDNA(object):
         if data and 'params' not in kwargs.keys():
             kwargs['params'] = data
 
-        response = getattr(self.client, method)(
-                     self._get_url(uri),
-                     headers=headers,
-                     quote_plus=True,
-                     *args, **kwargs
-                   )
+        request = Request(
+                    method.upper(),
+                    self._get_url(uri),
+                    headers=headers,
+                    *args,
+                    **kwargs
+                  )
+
+        prepared = request.prepare()
+
+        signed_url, signed_headers, signed_body = \
+          self._sign_request(
+            prepared.url.replace('+', '%20'),
+            method.upper(),
+            prepared.body.replace('+', '%20') if prepared.body else None,
+            prepared.headers
+          )
+
+        import ipdb; ipdb.set_trace()
+
+        if prepared.body:
+            prepared.body = prepared.body.replace('+', '%20')
+
+        prepared.url = signed_url
+        prepared.headers = signed_headers
+
+        response = self.client.send(prepared)
 
         if debug_request:
             return response
@@ -77,7 +134,7 @@ class NetDNA(object):
                 if response.status_code not in xrange(100, 401):
                     raise Exception("%d: %s" % (
                                      response.status_code,
-                                     response.json['error']['message'])
+                                     response.json()['error']['message'])
                                    )
             except TypeError:
                 raise Exception(
@@ -85,7 +142,7 @@ class NetDNA(object):
                   response.status_code,)
                 )
 
-        return response.json
+        return response.json()
 
     def get(self, uri, **kwargs):
         return self._response_as_json("get", uri, **kwargs)

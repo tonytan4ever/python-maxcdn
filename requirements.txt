@@ -1,4 +1,3 @@
-requests_netdna
-requests_oauth
+-e git://github.com/requests/requests-oauthlib.git#egg=requests-oauthlib
 requests
 certifi
