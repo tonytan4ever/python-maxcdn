@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="netdnarws",
-    version="0.2.2",
+    version="0.2.3",
     description="A Python REST Client for NetDNA REST Web Services",
     author="NetDNA Developer Team",
     author_email = "devteam@netdna.com",
