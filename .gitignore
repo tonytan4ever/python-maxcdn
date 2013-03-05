@@ -1,5 +1,4 @@
 *.pyc
-.pypirc
 src/*
 build/*
 dist/*
