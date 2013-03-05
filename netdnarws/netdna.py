@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import requests_netdna as requests
 from oauth_hook import OAuthHook
 
