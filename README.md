@@ -35,12 +35,29 @@ api.delete("/zones/pull.json/77573/cache", data={'file': '/my-file.png'})
 ## Methods
 It has support for `GET`, `POST`, `PUT` and `DELETE` OAuth signed requests.
 
+### We now have a shortcut for Purge Calls!
+```python
+zone_id = 12345
+
+# Purge Zone
+api.purge(zone_id)
+
+# Purge File
+api.purge(zone_id, '/some_file')
+
+# Purge Files
+api.purge(zone_id, ['/some_file', '/another_file'])
+```
+
 Every request can take an optional debug parameter.
 ```python
 api.get("/account.json", debug=True)
 # Will output
 # Making GET request to http://rws.netdna.com/myalias/account.json
 #{... API Returned Stuff ...}
+
+Every request can also take an optional debug_json parameter if you don't like the exception based errors.
+api.get('/account.json', debug_json=True)
 ```
 
 For more information about what optional parameters this methods accept you
