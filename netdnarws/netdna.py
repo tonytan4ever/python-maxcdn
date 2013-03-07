@@ -102,3 +102,24 @@ class NetDNA(object):
 
     def delete(self, uri, **kwargs):
         return self._response_as_json("delete", uri, **kwargs)
+
+    def purge(self, zone_id, file_or_files=None, **kwargs):
+        if isinstance(file_or_files, list):
+            responses = {}
+            for f in file_or_files:
+                responses[f] = self.delete(
+                                 '/zones/pull.json/%s/cache' % (zone_id,),
+                                 params={'file': f},
+                                 debug_json=True,
+                                 **kwargs
+                               )
+            return responses
+
+        if file_or_files is not None:
+            return self.delete(
+                     '/zones/pull.json/%s/cache' % (zone_id,),
+                     params={'file': file_or_files},
+                     **kwargs
+                   )
+
+        return self.delete('/zones/pull.json/%s/cache' % (zone_id,), **kwargs)
