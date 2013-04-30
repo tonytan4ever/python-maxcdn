@@ -91,34 +91,31 @@ class NetDNA(object):
     def get(self, uri, **kwargs):
         return self._response_as_json("get", uri, **kwargs)
 
-    def post(self, uri, data=dict(), **kwargs):
+    def post(self, uri, data=None, **kwargs):
+        if data is None:
+            data = {}
         return self._response_as_json("post", uri, data=data, **kwargs)
 
-    def put(self, uri, data=dict(), **kwargs):
-        return self._response_as_json("put", uri, data=data, **kwargs)
+    def put(self, uri, data=None, **kwargs):
+        override_headers = kwargs.get('override_headers', True)
+        if data is None:
+            data = {}
 
-    def patch(self, uri, data=dict(), **kwargs):
+        return self._response_as_json("put", uri, data=data, override_headers=override_headers, **kwargs)
+
+    def patch(self, uri, data=None, **kwargs):
+        if data is None:
+            data = {}
         return self._response_as_json("patch", uri, data=data, **kwargs)
 
     def delete(self, uri, **kwargs):
         return self._response_as_json("delete", uri, **kwargs)
 
     def purge(self, zone_id, file_or_files=None, **kwargs):
-        if isinstance(file_or_files, list):
-            responses = {}
-            for f in file_or_files:
-                responses[f] = self.delete(
-                                 '/zones/pull.json/%s/cache' % (zone_id,),
-                                 params={'file': f},
-                                 debug_json=True,
-                                 **kwargs
-                               )
-            return responses
-
         if file_or_files is not None:
             return self.delete(
                      '/zones/pull.json/%s/cache' % (zone_id,),
-                     params={'file': file_or_files},
+                     params={'files': file_or_files},
                      **kwargs
                    )
 
