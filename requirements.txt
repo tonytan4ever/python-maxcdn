@@ -1,4 +1,4 @@
+requests
 requests_netdna
 requests_oauth
-requests
 certifi

@@ -50,7 +50,7 @@ class NetDNA(object):
     def _response_as_json(self, method, uri, debug=False,
           debug_json=False, debug_request=False, override_headers=False,
           *args, **kwargs):
-        headers = None
+        headers = {"User-Agent": "Python NetDNA API Client"}
 
         if debug:
             print "Making %s request to %s\n" % (method.upper(),
@@ -58,7 +58,7 @@ class NetDNA(object):
         data = kwargs.get('data', None)
 
         if override_headers:
-             headers = self._get_content_length_header(data)
+             headers.update(self._get_content_length_header(data))
 
         if data and 'params' not in kwargs.keys():
             kwargs['params'] = data
