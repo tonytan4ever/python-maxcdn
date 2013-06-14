@@ -41,7 +41,7 @@ class NetDNA(object):
 
     def _get_content_length(self, data):
         if data:
-            return len(requests.models.Request._encode_params(data))
+            return len(requests.models.Request()._encode_params(data, True))
         return 0
 
     def _get_content_length_header(self, data):
