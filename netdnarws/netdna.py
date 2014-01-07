@@ -115,7 +115,7 @@ class NetDNA(object):
         if file_or_files is not None:
             return self.delete(
                      '/zones/pull.json/%s/cache' % (zone_id,),
-                     params={'files': file_or_files},
+                     data={'files': file_or_files},
                      **kwargs
                    )
 
