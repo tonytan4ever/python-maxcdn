@@ -3,14 +3,14 @@
 from setuptools import setup
 
 setup(
-    name="netdnarws",
-    version="0.2.8",
-    description="A Python REST Client for NetDNA REST Web Services",
-    author="NetDNA Developer Team",
-    author_email = "devteam@netdna.com",
-    license = "GPL v3",
-    keywords = "NetDNA CDN API REST",
-    packages=['netdnarws'],
+    name="maxcdn",
+    version="0.0.1",
+    description="A Python REST Client for MaxCDN REST Web Services",
+    author="Joshua P. Mervine",
+    author_email = "joshua@mervine.net",
+    license = "MIT",
+    keywords = "MAxCDN CDN API REST",
+    packages=['maxcdn'],
     include_package_data=True,
     install_requires=[
       'requests',
@@ -18,5 +18,5 @@ setup(
       'requests_oauth',
       'certifi'
     ],
-    url='http://developer.netdna.com',
+    url='http://www.maxcdn.com',
 )

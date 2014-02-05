@@ -3,25 +3,25 @@ import requests_netdna as requests
 from oauth_hook import OAuthHook
 
 
-class NetDNAOAuthHook(OAuthHook):
+class MaxCDNOAuthHook(OAuthHook):
 
     def __init__(self, consumer_key, consumer_secret, token=None,
                  token_secret=None, header_auth=True, **kwargs):
-        super(NetDNAOAuthHook, self).__init__(token, token_secret,
+        super(MaxCDNOAuthHook, self).__init__(token, token_secret,
                                               consumer_key, consumer_secret,
                                               header_auth)
 
 
-class NetDNA(object):
+class MaxCDN(object):
 
     def __init__(self, company_alias, key, secret,
-                 server='rws.netdna.com', secure_connection=True, **kwargs):
+                 server='rws.maxcdn.com', secure_connection=True, **kwargs):
         self.company_alias = company_alias
         self.server = server
         self.secure_connection = secure_connection
         self.client = requests.session(
                         hooks={
-                          'pre_request': NetDNAOAuthHook(key, secret, **kwargs)
+                          'pre_request': MaxCDNOAuthHook(key, secret, **kwargs)
                         }
                       )
 
@@ -50,7 +50,7 @@ class NetDNA(object):
     def _response_as_json(self, method, uri, debug=False,
           debug_json=False, debug_request=False, override_headers=False,
           *args, **kwargs):
-        headers = {"User-Agent": "Python NetDNA API Client"}
+        headers = {"User-Agent": "Python MaxCDN API Client"}
 
         if debug:
             print "Making %s request to %s\n" % (method.upper(),
@@ -120,3 +120,4 @@ class NetDNA(object):
                    )
 
         return self.delete('/zones/pull.json/%s/cache' % (zone_id,), **kwargs)
+

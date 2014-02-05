@@ -1,22 +1,22 @@
 #We're Hiring!
 Do you like building cool stuff?  Do APIs keep you up at night? We're looking for our next superstar hacker and you could be it. Interested? Check out our job posting on [stackoverflow](http://careers.stackoverflow.com/jobs/37078/senior-web-engineer-for-fun-growing-la-startup-maxcdn&a=JdFbT4OY).
 
-# NetDNA REST Web Services Python Client
+# MaxCDN REST Web Services Python Client
 
-## Prerequisites 
+## Prerequisites
 
 `sudo pip install requests`
 
 `sudo pip install certifi`
 
 ## Installation
-`sudo pip install netdnarws`
+`sudo pip install maxcdn`
 
 ## Usage
 ```python
-from netdnarws import NetDNA
+from maxcdn import MaxCDN
 
-api = NetDNA("myalias", "consumer_key", "consumer_secret")
+api = MaxCDN("myalias", "consumer_key", "consumer_secret")
 
 # Get Account Info
 api.get("/account.json")
@@ -75,9 +75,10 @@ For applications that require user authentication, you can
 initialize the API as follows.
 
 ```python
-api = NetDNA("myalias", "consumer_key", "consumer_secret",
+api = MaxCDN("myalias", "consumer_key", "consumer_secret",
              token="user_token", token_secret="user_token_secret")
 ```
 
 You can also send the optional parameter header_auth, which takes a boolean
 to send the OAuth header in the body or URLEncoded.
+
