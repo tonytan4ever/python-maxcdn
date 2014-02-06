@@ -3,12 +3,6 @@ Do you like building cool stuff?  Do APIs keep you up at night? We're looking fo
 
 # MaxCDN REST Web Services Python Client
 
-## Prerequisites
-
-`sudo pip install requests`
-
-`sudo pip install certifi`
-
 ## Installation
 `sudo pip install maxcdn`
 

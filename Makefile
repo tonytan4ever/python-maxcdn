@@ -1,8 +1,18 @@
+# Setup
+###
 target=build
 source=src
-python=PYTHONPATH=./$(target):$(PYTHONPATH) python
-nose=$(python) ./$(source)/nose/bin/nosetests
 
+pypath=PYTHONPATH=./$(target):$(PYTHONPATH)
+
+nose=./$(source)/nose/bin/nosetests
+
+tests=./test/test.py
+test_opts=-v --with-coverage --cover-package=maxcdn
+
+
+# Tasks
+###
 init: clean setup test
 
 setup:
@@ -13,14 +23,24 @@ clean:
 	find . -type f -name "*.pyc" -exec rm -v {} \;
 
 test:
-	$(nose) -v --with-coverage --cover-package=maxcdn \
-		./test/test.py
+	$(pypath) python $(nose) $(test_opts) \
+		$(tests)
+
+test/help:
+	$(nose) --help | less
+
+# TODO: support 3.x
+#test/32:
+	#$(pypath) python3.2 $(nose) $(test_opts) \
+		#$(tests)
+
+#test/33:
+	#$(pypath) python3.3 $(nose) $(test_opts) \
+		#$(tests)
 
 travis: setup
 	$(nose) -v  --with-xunit --xunit-file=junit-report.xml \
 		./test/test.py
 
-test/help:
-	$(nose) --help | less
+.PHONY: init clean test coverage test/help test/32 test/33
 
-.PHONY: init clean test coverage test/help
