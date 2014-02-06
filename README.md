@@ -3,6 +3,8 @@ Do you like building cool stuff?  Do APIs keep you up at night? We're looking fo
 
 # MaxCDN REST Web Services Python Client
 
+[![Build Status](https://travis-ci.org/jmervine/python-maxcdn.png?branch=master)](https://travis-ci.org/jmervine/python-maxcdn)
+
 > TODO: Support Python 3.x
 
 ## Installation
