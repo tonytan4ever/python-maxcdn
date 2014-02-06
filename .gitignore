@@ -3,3 +3,6 @@ src/*
 build/*
 dist/*
 netdnarws.egg-info/*
+.coverage
+junit-report.xml
+.ropeproject

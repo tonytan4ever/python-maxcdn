@@ -55,13 +55,13 @@ class MaxCDN(object):
         if debug:
             print "Making %s request to %s\n" % (method.upper(),
                                                  self._get_url(uri))
-        data = kwargs.get('data', None)
+        data = kwargs.pop('data', None)
 
         if override_headers:
              headers.update(self._get_content_length_header(data))
 
-        if data and 'params' not in kwargs.keys():
-            kwargs['params'] = data
+        if data:
+            kwargs['params'] = kwargs.get('params',data)
 
         response = getattr(self.client, method)(
                      self._get_url(uri),
@@ -91,21 +91,16 @@ class MaxCDN(object):
     def get(self, uri, **kwargs):
         return self._response_as_json("get", uri, **kwargs)
 
-    def post(self, uri, data=None, **kwargs):
-        if data is None:
-            data = {}
+    def post(self, uri, data={}, **kwargs):
         return self._response_as_json("post", uri, data=data, **kwargs)
 
-    def put(self, uri, data=None, **kwargs):
-        override_headers = kwargs.get('override_headers', True)
-        if data is None:
-            data = {}
+    def put(self, uri, data={}, **kwargs):
+        if not kwargs.has_key('override_headers'):
+            kwargs['override_headers'] = True
 
-        return self._response_as_json("put", uri, data=data, override_headers=override_headers, **kwargs)
+        return self._response_as_json("put", uri, data=data, **kwargs)
 
-    def patch(self, uri, data=None, **kwargs):
-        if data is None:
-            data = {}
+    def patch(self, uri, data={}, **kwargs):
         return self._response_as_json("patch", uri, data=data, **kwargs)
 
     def delete(self, uri, **kwargs):
