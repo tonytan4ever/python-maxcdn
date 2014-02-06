@@ -23,24 +23,21 @@ clean:
 	find . -type f -name "*.pyc" -exec rm -v {} \;
 
 test:
-	$(pypath) python $(nose) $(test_opts) \
-		$(tests)
+	$(pypath) python $(nose) $(test_opts) $(tests)
 
 test/help:
 	$(nose) --help | less
 
 # TODO: support 3.x
 #test/32:
-	#$(pypath) python3.2 $(nose) $(test_opts) \
-		#$(tests)
+	#$(pypath) python3.2 $(nose) $(test_opts) $(tests)
 
 #test/33:
-	#$(pypath) python3.3 $(nose) $(test_opts) \
-		#$(tests)
+	#$(pypath) python3.3 $(nose) $(test_opts) $(tests)
 
 travis: setup
-	$(nose) -v  --with-xunit --xunit-file=junit-report.xml \
-		./test/test.py
+	$(pypath) python $(nose) -v --with-xunit --xunit-file=junit-report.xml \
+		$(tests)
 
 .PHONY: init clean test coverage test/help test/32 test/33
 
