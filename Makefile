@@ -8,7 +8,9 @@ pypath=PYTHONPATH=./$(target):$(PYTHONPATH)
 nose=./$(source)/nose/bin/nosetests
 
 tests=./test/test.py
-test_opts=-v --with-coverage --cover-package=maxcdn
+int=./test/int.py
+test_opts=-v
+cov_opts= --with-coverage --cover-package=maxcdn
 
 
 # Tasks
@@ -22,9 +24,14 @@ clean:
 	rm -rf $(source) $(target) .ropeproject .coverage junit-report.xml
 	find . -type f -name "*.pyc" -exec rm -v {} \;
 
+coverage:
+	$(pypath) python $(nose) $(cov_opts) $(tests)
+
 test:
-	$(pypath) python $(nose) $(test_opts) \
-		$(tests)
+	$(pypath) python $(nose) $(test_opts) $(tests)
+
+int:
+	$(pypath) python $(nose) $(test_opts) $(int)
 
 test/help:
 	$(nose) --help | less
