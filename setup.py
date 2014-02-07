@@ -14,8 +14,7 @@ setup(
     include_package_data=True,
     install_requires=[
       'requests',
-      'requests_netdna',
-      'requests_oauth',
+      'requests_oauthlib',
       'certifi'
     ],
     url='http://www.maxcdn.com',
