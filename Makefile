@@ -46,8 +46,7 @@ test/help:
 		#$(tests)
 
 travis: setup
-	$(nose) -v  --with-xunit --xunit-file=junit-report.xml \
-		./test/test.py
+	$(pypath) python $(nose) -v  --with-xunit --xunit-file=junit-report.xml $(tests) 
 
 .PHONY: init clean test coverage test/help test/32 test/33
 
