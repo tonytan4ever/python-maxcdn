@@ -1,91 +1,56 @@
-from requests_oauthlib import OAuth1Session
-from urllib import urlencode
+from requests_oauthlib import OAuth1Session as OAuth1
+from os import environ as env
+import urlparse
 
 class MaxCDN(object):
+    def __init__(self, alias, key, secret, server="rws.maxcdn.com", **kwargs):
+        self.url    = "https://%s/%s" % (server, alias)
+        self.client = OAuth1(env["KEY"], client_secret=env["SECRET"], **kwargs)
 
-    def __init__(self, company_alias, key, secret,
-            server="rws.maxcdn.com", secure_connection=True, **kwargs):
-        self.company_alias = company_alias
-        self.server = server
-        self.secure_connection = secure_connection
+    def _get_headers(self, json=True):
+        headers = { "User-Agent": None }
+        if json:
+            headers["Content-Type"] = "application/json"
+        return headers
 
-        self.client = OAuth1Session(key,
-                client_secret=secret)
+    def _get_url(self, end_point):
+        if not end_point.startswith("/"):
+            return "%s/%s" % (self.url, end_point)
+        else:
+            return self.url + end_point
 
-    @property
-    def _connection_type(self):
-        if self.secure_connection:
-            return "https"
-        return "http"
+    def _data_request(self, method, end_point, data, **kwargs):
+        if not data and kwargs.has_key("params"):
+            params = kwargs.pop("params")
+            if type(params) is str:
+                params = urlparse.parse_qs(params)
+            data = params
 
-    def _get_url(self, uri):
-        if not uri.startswith("/"): uri = "/"+uri
+        return getattr(self.client, method)(self._get_url(end_point),
+                data=data, headers=self._get_headers(json=True),
+                **kwargs).json()
 
-        return "%s://%s/%s%s" % (self._connection_type,
-                self.server, self.company_alias, uri)
+    def get(self, end_point, **kwargs):
+        return self.client.get(self._get_url(end_point),
+                headers=self._get_headers(json=False),
+                **kwargs).json()
 
-    def _get_content_length(self, data):
-        if data:
-            return len(urlencode(data, True).replace("+", "%20"))
-        return 0
+    def patch(self, end_point, data=None, **kwargs):
+        return self._data_request("post", end_point, data=data, **kwargs)
 
-    def _get_content_length_header(self, data):
-        return {"Content-Length": str(self._get_content_length(data))}
+    def post(self, end_point, data=None, **kwargs):
+        return self._data_request("post", end_point, data=data, **kwargs)
 
-    def _response_as_json(self, method, uri, debug=False,
-            debug_json=False, debug_request=False, override_headers=False,
-            *args, **kwargs):
+    def put(self, end_point, data=None, **kwargs):
+        return self._data_request("put", end_point, data=data, **kwargs)
 
-        headers = {"User-Agent": "Python MaxCDN API Client"}
+    def delete(self, end_point, data=None, **kwargs):
+        return self._data_request("delete", end_point, data=data, **kwargs)
 
-        if debug:
-            print "Making %s request to %s\n" % (method.upper(),
-                    self._get_url(uri))
-
-        data = kwargs.pop("data", None)
-
-        if override_headers:
-            headers.update(self._get_content_length_header(data))
-
-        response = getattr(self.client, method)(self._get_url(uri),
-                headers=headers, data=data, *args, **kwargs)
-
-        if debug_request:
-            return response
-
-        if not debug_json:
-            try:
-                if response.status_code not in xrange(100, 401):
-                    raise Exception("%d: %s" % (response.status_code,
-                        response.json["error"]["message"]))
-
-            except TypeError:
-                raise Exception("%d: No Error information supplied by the server" % (
-                    response.status_code))
-
-        return response.json()
-
-    def get(self, uri, **kwargs):
-        return self._response_as_json("get", uri, **kwargs)
-
-    def post(self, uri, data={}, **kwargs):
-        return self._response_as_json("post", uri, data=data, **kwargs)
-
-    def put(self, uri, data={}, **kwargs):
-        if not kwargs.has_key("override_headers"):
-            kwargs["override_headers"] = True
-        return self._response_as_json("put", uri, data=data, **kwargs)
-
-    def patch(self, uri, data={}, **kwargs):
-        return self._response_as_json("patch", uri, data=data, **kwargs)
-
-    def delete(self, uri, **kwargs):
-        return self._response_as_json("delete", uri, **kwargs)
-
-    def purge(self, zone_id, file_or_files=None, **kwargs):
+    def purge(self, zoneid, file_or_files=None, **kwargs):
+        path = "/zones/pull.json/%s/cache" % (zoneid)
         if file_or_files is not None:
-            return self.delete("/zones/pull.json/%s/cache" % (zone_id,),
-                    data={"files": file_or_files}, **kwargs)
-
-        return self.delete("/zones/pull.json/%s/cache" % (zone_id,), **kwargs)
+            return self.delete(path, data = { "files": file_or_files },
+                    **kwargs)
+        return self.delete(path, **kwargs)
 
