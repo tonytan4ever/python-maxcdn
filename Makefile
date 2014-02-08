@@ -3,7 +3,7 @@
 target=build
 source=src
 
-pypath=PYTHONPATH=./$(target):$(PYTHONPATH)
+pypath=PYTHONPATH=./$(target):./maxcdn:$(PYTHONPATH)
 
 nose=./$(source)/nose/bin/nosetests
 
