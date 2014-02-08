@@ -34,16 +34,16 @@ class MaxCDNIntegration(unittest.TestCase):
         self.assertTrue(zid, "post")
         self.assertEqual(200, self.max.delete("/zones/pull.json/"+zid)["code"], "delete")
 
-    #def test_put(self):
-        #street = self.time + "_put"
-        #self.assertEqual(street, str(self.max.put("/account.json/address", { "street1": street })["data"]["address"]["street1"]))
+    def test_put(self):
+        street = self.time + "_put"
+        self.assertEqual(street, str(self.max.put("/account.json/address", { "street1": street })["data"]["address"]["street1"]))
 
     def test_purge(self):
         zone = self.max.get("zones/pull.json")["data"]["pullzones"][0]["id"]
         self.assertEqual(200, self.max.purge(zone)["code"])
 
-        #popularfiles = self.max.get("reports/popularfiles.json")["data"]["popularfiles"]
+        popularfiles = self.max.get("reports/popularfiles.json")["data"]["popularfiles"]
 
-        #self.assertEqual(200, self.max.purge(zone, popularfiles[0]["uri"])["code"])
-        #self.assertEqual(200, self.max.purge(zone, [ popularfiles[0]["uri"], popularfiles[1]["uri"]])["code"])
+        self.assertEqual(200, self.max.purge(zone, popularfiles[0]["uri"])["code"])
+        self.assertEqual(200, self.max.purge(zone, [ popularfiles[0]["uri"], popularfiles[1]["uri"]])["code"])
 
