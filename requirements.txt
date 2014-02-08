@@ -1,5 +1,4 @@
 requests
 requests_oauthlib
 certifi
-nose
 mock

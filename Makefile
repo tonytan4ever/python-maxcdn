@@ -1,17 +1,16 @@
 # Setup
 ###
-target=build
-source=src
+target=$(PWD)/build
+source=$(PWD)/src
 
-pypath=PYTHONPATH=./$(target):./maxcdn:$(PYTHONPATH)
+pypath=PYTHONPATH=$(target):./maxcdn:$(PYTHONPATH)
 
-nose=./$(source)/nose/bin/nosetests
+nose_opts=-v
+nose=python $(source)/nose/bin/nosetests
+cov_opts= --with-coverage --cover-package=maxcdn
 
 tests=./test/test.py
 int=./test/int.py
-test_opts=-v
-cov_opts= --with-coverage --cover-package=maxcdn
-
 
 # Tasks
 ###
@@ -27,21 +26,23 @@ clean:
 coverage: build/coverage
 	$(pypath) python $(nose) $(cov_opts) $(tests)
 
+nose: build/nose
+	$(pypath) $(nose) $(nose_opts) $(tests)
+
+nose/int: build/nose
+	$(pypath) $(nose) $(nose_opts) $(int)
+
 test:
-	$(pypath) python $(nose) $(test_opts) $(tests)
+	$(pypath) python $(tests)
+
+test/32:
+	$(pypath) python3.2 $(tests)
+
+test/33:
+	$(pypath) python3.3 $(tests)
 
 int:
-	$(pypath) python $(nose) $(test_opts) $(int)
-
-test/help:
-	$(nose) --help | less
-
-# TODO: support 3.x
-#test/32:
-	#$(pypath) python3.2 $(nose) $(test_opts) $(tests)
-
-#test/33:
-	#$(pypath) python3.3 $(nose) $(test_opts) $(tests)
+	$(pypath) python $(test_opts) $(int)
 
 travis: setup test
 
@@ -51,5 +52,7 @@ distribute:
 build/coverage:
 	pip install coverage -t $(target) -b $(source)
 
-.PHONY: init clean test coverage test/help test/32 test/33
+build/nose:
+	pip install nose -t $(target) -b $(source)
 
+.PHONY: init clean test coverage test/help test/32 test/33

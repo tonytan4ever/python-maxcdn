@@ -100,3 +100,5 @@ class MaxCDNTests(unittest.TestCase):
         self.assertEqual(self.maxcdn.purge(12345, ["/master.css", "/other.css"]),
                 { "code": 200, "method": "delete", "data": { "foo":"bar" } })
 
+if __name__ == '__main__':
+        unittest.main()

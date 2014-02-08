@@ -47,3 +47,5 @@ class MaxCDNIntegration(unittest.TestCase):
         self.assertEqual(200, self.max.purge(zone, popularfiles[0]["uri"])["code"])
         self.assertEqual(200, self.max.purge(zone, [ popularfiles[0]["uri"], popularfiles[1]["uri"]])["code"])
 
+if __name__ == '__main__':
+        unittest.main()
