@@ -8,7 +8,10 @@ Do you like building cool stuff?  Do APIs keep you up at night? We're looking fo
 > TODO: Support Python 3.x
 
 ## Installation
-`sudo pip install maxcdn`
+
+```
+sudo pip install maxcdn # coming soon
+```
 
 ## Usage
 ```python
