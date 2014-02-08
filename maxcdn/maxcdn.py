@@ -20,7 +20,7 @@ class MaxCDN(object):
             return self.url + end_point
 
     def _data_request(self, method, end_point, data, **kwargs):
-        if not data and kwargs.has_key("params"):
+        if data is None and kwargs.has_key("params"):
             params = kwargs.pop("params")
             if type(params) is str:
                 params = urlparse.parse_qs(params)

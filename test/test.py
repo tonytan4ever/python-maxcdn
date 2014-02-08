@@ -57,7 +57,11 @@ class MaxCDNTests(unittest.TestCase):
     def test_post(self):
         requests.Session.request = mock.create_autospec(mock_request,
                 return_value=response("post"))
-        self.assertEqual(self.maxcdn.post("/post.json"),
+        self.assertEqual(self.maxcdn.post("/post.json", data={ "foo": "bar" }),
+                { "code": 200, "method": "post", "data": { "foo":"bar" } })
+        self.assertEqual(self.maxcdn.post("/post.json", params={ "foo": "bar" }),
+                { "code": 200, "method": "post", "data": { "foo":"bar" } })
+        self.assertEqual(self.maxcdn.post("/post.json", params="foo=bar"),
                 { "code": 200, "method": "post", "data": { "foo":"bar" } })
 
     def test_put(self):
