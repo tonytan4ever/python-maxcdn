@@ -1,6 +1,10 @@
 from requests_oauthlib import OAuth1Session as OAuth1
 from os import environ as env
-import urlparse
+
+try:
+    import urlparse
+except ImportError: # handly python 3.x
+    from urllib import parse as urlparse
 
 class MaxCDN(object):
     def __init__(self, alias, key, secret, server="rws.maxcdn.com", **kwargs):
