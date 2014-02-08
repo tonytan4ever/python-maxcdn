@@ -5,7 +5,7 @@ import urlparse
 class MaxCDN(object):
     def __init__(self, alias, key, secret, server="rws.maxcdn.com", **kwargs):
         self.url    = "https://%s/%s" % (server, alias)
-        self.client = OAuth1(env["KEY"], client_secret=env["SECRET"], **kwargs)
+        self.client = OAuth1(key, client_secret=secret, **kwargs)
 
     def _get_headers(self, json=True):
         headers = { "User-Agent": None }
