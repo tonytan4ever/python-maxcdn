@@ -83,3 +83,18 @@ api = MaxCDN("myalias", "consumer_key", "consumer_secret",
 You can also send the optional parameter header_auth, which takes a boolean
 to send the OAuth header in the body or URLEncoded.
 
+# Development
+
+```
+git clone https://github.com/jmervine/python-maxcdn.git
+
+make          # setup and test
+make setup    # installation w/ deps
+make test     # test w/ primary python
+make int      # integration tests w/ primary python
+make test/all # test w/ python2 python3.2 python3.3 python3.4
+make int      # integration tests
+make int/all  # integration w/ python2 python3.2 python3.3 python3.4
+make nose     # verbose test output w/ nosetests
+```
+
