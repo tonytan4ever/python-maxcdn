@@ -1,6 +1,5 @@
 requests
-requests_netdna
-requests_oauth
+requests_oauthlib
 certifi
 nose
 mock

@@ -1,118 +1,56 @@
-from __future__ import unicode_literals
-import requests_netdna as requests
-from oauth_hook import OAuthHook
-
-
-class MaxCDNOAuthHook(OAuthHook):
-
-    def __init__(self, consumer_key, consumer_secret, token=None,
-                 token_secret=None, header_auth=True, **kwargs):
-        super(MaxCDNOAuthHook, self).__init__(token, token_secret,
-                                              consumer_key, consumer_secret,
-                                              header_auth)
-
+from requests_oauthlib import OAuth1Session as OAuth1
+from os import environ as env
+import urlparse
 
 class MaxCDN(object):
+    def __init__(self, alias, key, secret, server="rws.maxcdn.com", **kwargs):
+        self.url    = "https://%s/%s" % (server, alias)
+        self.client = OAuth1(key, client_secret=secret, **kwargs)
 
-    def __init__(self, company_alias, key, secret,
-                 server='rws.maxcdn.com', secure_connection=True, **kwargs):
-        self.company_alias = company_alias
-        self.server = server
-        self.secure_connection = secure_connection
-        self.client = requests.session(
-                        hooks={
-                          'pre_request': MaxCDNOAuthHook(key, secret, **kwargs)
-                        }
-                      )
+    def _get_headers(self, json=True):
+        headers = { "User-Agent": None }
+        if json:
+            headers["Content-Type"] = "application/json"
+        return headers
 
-    @property
-    def _connection_type(self):
-        if self.secure_connection:
-            return "https"
-        return "http"
+    def _get_url(self, end_point):
+        if not end_point.startswith("/"):
+            return "%s/%s" % (self.url, end_point)
+        else:
+            return self.url + end_point
 
-    def _get_url(self, uri):
-        return "%s://%s/%s%s" % (
-                                  self._connection_type,
-                                  self.server,
-                                  self.company_alias,
-                                  uri
-                                )
+    def _data_request(self, method, end_point, data, **kwargs):
+        if data is None and kwargs.has_key("params"):
+            params = kwargs.pop("params")
+            if type(params) is str:
+                params = urlparse.parse_qs(params)
+            data = params
 
-    def _get_content_length(self, data):
-        if data:
-            return len(requests.models.Request()._encode_params(data, True))
-        return 0
+        return getattr(self.client, method)(self._get_url(end_point),
+                data=data, headers=self._get_headers(json=True),
+                **kwargs).json()
 
-    def _get_content_length_header(self, data):
-        return {'Content-Length': str(self._get_content_length(data))}
+    def get(self, end_point, **kwargs):
+        return self.client.get(self._get_url(end_point),
+                headers=self._get_headers(json=False),
+                **kwargs).json()
 
-    def _response_as_json(self, method, uri, debug=False,
-          debug_json=False, debug_request=False, override_headers=False,
-          *args, **kwargs):
-        headers = {"User-Agent": "Python MaxCDN API Client"}
+    def patch(self, end_point, data=None, **kwargs):
+        return self._data_request("post", end_point, data=data, **kwargs)
 
-        if debug:
-            print "Making %s request to %s\n" % (method.upper(),
-                                                 self._get_url(uri))
-        data = kwargs.pop('data', None)
+    def post(self, end_point, data=None, **kwargs):
+        return self._data_request("post", end_point, data=data, **kwargs)
 
-        if override_headers:
-             headers.update(self._get_content_length_header(data))
+    def put(self, end_point, data=None, **kwargs):
+        return self._data_request("put", end_point, data=data, **kwargs)
 
-        if data:
-            kwargs['params'] = kwargs.get('params',data)
+    def delete(self, end_point, data=None, **kwargs):
+        return self._data_request("delete", end_point, data=data, **kwargs)
 
-        response = getattr(self.client, method)(
-                     self._get_url(uri),
-                     headers=headers,
-                     quote_plus=True,
-                     *args, **kwargs
-                   )
-
-        if debug_request:
-            return response
-
-        if not debug_json:
-            try:
-                if response.status_code not in xrange(100, 401):
-                    raise Exception("%d: %s" % (
-                                     response.status_code,
-                                     response.json['error']['message'])
-                                   )
-            except TypeError:
-                raise Exception(
-                  "%d: No Error information supplied by the server" % (
-                  response.status_code,)
-                )
-
-        return response.json
-
-    def get(self, uri, **kwargs):
-        return self._response_as_json("get", uri, **kwargs)
-
-    def post(self, uri, data={}, **kwargs):
-        return self._response_as_json("post", uri, data=data, **kwargs)
-
-    def put(self, uri, data={}, **kwargs):
-        if not kwargs.has_key('override_headers'):
-            kwargs['override_headers'] = True
-
-        return self._response_as_json("put", uri, data=data, **kwargs)
-
-    def patch(self, uri, data={}, **kwargs):
-        return self._response_as_json("patch", uri, data=data, **kwargs)
-
-    def delete(self, uri, **kwargs):
-        return self._response_as_json("delete", uri, **kwargs)
-
-    def purge(self, zone_id, file_or_files=None, **kwargs):
+    def purge(self, zoneid, file_or_files=None, **kwargs):
+        path = "/zones/pull.json/%s/cache" % (zoneid)
         if file_or_files is not None:
-            return self.delete(
-                     '/zones/pull.json/%s/cache' % (zone_id,),
-                     data={'files': file_or_files},
-                     **kwargs
-                   )
-
-        return self.delete('/zones/pull.json/%s/cache' % (zone_id,), **kwargs)
+            return self.delete(path, data = { "files": file_or_files },
+                    **kwargs)
+        return self.delete(path, **kwargs)
 
