@@ -41,15 +41,10 @@ test/33:
 	# python 3.3
 	$(pypath) python3.3 $(tests)
 
-test/34:
-	# python 3.4
-	$(pypath) python3.4 $(test_opts) $(tests)
-
 test/all:
 	-make test/2
 	-make test/32
 	-make test/33
-	-make test/34
 
 nose: build/nose
 	$(pypath) $(nose) $(nose_opts) $(tests)
@@ -74,15 +69,10 @@ int/33:
 	# python 3.3
 	$(pypath) python3.3 $(test_opts) $(int)
 
-int/34:
-	# python 3.4
-	$(pypath) python3.4 $(test_opts) $(int)
-
 int/all:
 	-make int/2
 	-make int/32
 	-make int/33
-	-make int/34
 
 travis: setup test
 
