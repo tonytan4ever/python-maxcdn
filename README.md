@@ -87,6 +87,7 @@ to send the OAuth header in the body or URLEncoded.
 
 ```
 git clone https://github.com/jmervine/python-maxcdn.git
+cd python-maxcdn
 
 make          # setup and test
 make setup    # installation w/ deps
@@ -96,5 +97,21 @@ make test/all # test w/ python2 python3.2 python3.3 python3.4
 make int      # integration tests
 make int/all  # integration w/ python2 python3.2 python3.3 python3.4
 make nose     # verbose test output w/ nosetests
+```
+
+# Examples
+
+Running examples:
+
+```
+git clone https://github.com/jmervine/python-maxcdn.git
+cd python-maxcdn
+make setup
+
+export PYTHONPATH=./build:./maxcdn:$PYTHONPATH
+
+./examples/simple.py
+./examples/report.py # [hourly|daily|monthly]
+./examples/purge.py  # [zoneid]
 ```
 
