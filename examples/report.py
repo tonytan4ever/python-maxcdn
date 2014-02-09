@@ -30,7 +30,7 @@ for zone in zones["data"]["pullzones"]:
 
     # summary
     fetch = maxcdn.get("/reports/%s/stats.json%s" % (zone["id"], report))
-    for key, val in fetch["data"]["summary"].iteritems():
+    for key, val in fetch["data"]["summary"].items():
         print(" - %s: %s" % (key, val))
 
     # popularfiles
