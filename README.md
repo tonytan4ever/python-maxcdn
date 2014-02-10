@@ -1,16 +1,15 @@
-#We're Hiring!
+# MaxCDN is Hiring!
+
 Do you like building cool stuff?  Do APIs keep you up at night? We're looking for our next superstar hacker and you could be it. Interested? Check out our job posting on [stackoverflow](http://careers.stackoverflow.com/jobs/37078/senior-web-engineer-for-fun-growing-la-startup-maxcdn&a=JdFbT4OY).
 
 # MaxCDN REST Web Services Python Client
 
-[![Build Status](https://travis-ci.org/jmervine/python-maxcdn.png?branch=master)](https://travis-ci.org/jmervine/python-maxcdn)
-
-> TODO: Support Python 3.x
+[![Build Status](https://travis-ci.org/maxcdn/python-maxcdn.png?branch=master)](https://travis-ci.org/maxcdn/python-maxcdn)
 
 ## Installation
 
 ```
-sudo pip install maxcdn # coming soon
+pip install maxcdn
 ```
 
 ## Usage
@@ -86,7 +85,7 @@ to send the OAuth header in the body or URLEncoded.
 # Development
 
 ```
-git clone https://github.com/jmervine/python-maxcdn.git
+git clone https://github.com/maxcdn/python-maxcdn.git
 cd python-maxcdn
 
 make          # setup and test
@@ -104,7 +103,7 @@ make nose     # verbose test output w/ nosetests
 Running examples:
 
 ```
-git clone https://github.com/jmervine/python-maxcdn.git
+git clone https://github.com/maxcdn/python-maxcdn.git
 cd python-maxcdn
 make setup
 
