@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import pprint as pp
-from os import environ as env
-from maxcdn import MaxCDN
+from os       import environ as env
+from maxcdn   import MaxCDN
+from textwrap import dedent
 
 if not "ALIAS" in env or not "KEY" in env or not "SECRET" in env:
     print(dedent("""\

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import pprint as pp
-from os import environ as env
-from maxcdn import MaxCDN
+from textwrap import dedent
+from os       import environ as env
+from maxcdn   import MaxCDN
 
 try:
     report = "/"+argv[1]
