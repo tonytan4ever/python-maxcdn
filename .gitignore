@@ -6,3 +6,4 @@ netdnarws.egg-info/*
 .coverage
 junit-report.xml
 .ropeproject
+maxcdn.egg-info

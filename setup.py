@@ -3,14 +3,14 @@
 
 options = {
     "name"                  : "maxcdn",
-    "version"               : "0.0.1",
+    "version"               : "0.0.2",
     "description"           : "A Python REST Client for MaxCDN REST Web Services",
     "author"                : "Joshua P. Mervine",
     "author_email"          : "joshua@mervine.net",
     "license"               : "MIT",
     "keywords"              : "MAxCDN CDN API REST",
     "packages"              : ['maxcdn'],
-    "url"                   : 'http://www.maxcdn.com'
+    "url"                   : 'http://github.com/maxcdn/python-maxcdn'
 }
 
 # additional setuptools data (python 2.x)

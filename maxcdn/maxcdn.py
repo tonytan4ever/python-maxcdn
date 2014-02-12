@@ -12,7 +12,7 @@ class MaxCDN(object):
         self.client = OAuth1(key, client_secret=secret, **kwargs)
 
     def _get_headers(self, json=True):
-        headers = { "User-Agent": None }
+        headers = { "User-Agent": "Python MaxCDN API Client" }
         if json:
             headers["Content-Type"] = "application/json"
         return headers
