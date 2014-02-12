@@ -1,18 +1,23 @@
-# MaxCDN is Hiring!
+MaxCDN is Hiring!
+=================
 
 Do you like building cool stuff?  Do APIs keep you up at night? We're looking for our next superstar hacker and you could be it. Interested? Check out our job posting on [stackoverflow](http://careers.stackoverflow.com/jobs/37078/senior-web-engineer-for-fun-growing-la-startup-maxcdn&a=JdFbT4OY).
 
-# MaxCDN REST Web Services Python Client
+MaxCDN REST Web Services Python Client
+======================================
 
 [![Build Status](https://travis-ci.org/maxcdn/python-maxcdn.png?branch=master)](https://travis-ci.org/maxcdn/python-maxcdn)
 
-## Installation
+Installation
+------------
 
 ```
 pip install maxcdn
 ```
 
-## Usage
+Usage
+-----
+
 ```python
 from maxcdn import MaxCDN
 
@@ -35,10 +40,14 @@ api.delete("/zones/pull.json/77573/cache", data={'file': '/my-file.png'})
 
 ```
 
-## Methods
+Methods
+-------
+
 It has support for `GET`, `POST`, `PUT` and `DELETE` OAuth signed requests.
 
-### We now have a shortcut for Purge Calls!
+We now have a shortcut for Purge Calls!
+--------------------------------------
+
 ```python
 zone_id = 12345
 
@@ -67,7 +76,9 @@ For more information about what optional parameters this methods accept you
 should check out [@kennethreitz](http://github.com/kennethreitz) library
 [Requests](https://github.com/kennethreitz/requests).
 
-## Initialization
+Initialization
+--------------
+
 For applications that don't require user authentication,
 you can use the default initialization as the example above.
 
@@ -82,7 +93,8 @@ api = MaxCDN("myalias", "consumer_key", "consumer_secret",
 You can also send the optional parameter header_auth, which takes a boolean
 to send the OAuth header in the body or URLEncoded.
 
-# Development
+Development
+-----------
 
 ```
 git clone https://github.com/maxcdn/python-maxcdn.git
@@ -98,7 +110,8 @@ make int/all  # integration w/ python2 python3.2 python3.3 python3.4
 make nose     # verbose test output w/ nosetests
 ```
 
-# Examples
+Examples
+--------
 
 Running examples:
 

@@ -85,4 +85,12 @@ build/coverage:
 build/nose:
 	pip install nose -t $(target) -b $(source)
 
+readme:
+	pandoc -s -t rst --toc README.md -o tmp.text
+	cat tmp.text| grep -v "Build\|Status" > README.text
+	rm tmp.text
+
+upload: readme
+	python setup.py sdist register upload
+
 .PHONY: init clean test coverage test/help test/32 test/33
