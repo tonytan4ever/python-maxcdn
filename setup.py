@@ -18,8 +18,10 @@ install_requires = [
   "requests",
   "requests_oauthlib",
   "certifi",
+]
+tests_require = [
   "nose",
-  "mock"
+  "mock",
 ]
 include_package_data = True
 
@@ -27,6 +29,7 @@ try:
     from setuptools import setup
     options["install_requires"] = install_requires
     options["include_package_data"] = include_package_data
+    options["tests_require"] = tests_require
     setup(**options)
 
 except ImportError:
