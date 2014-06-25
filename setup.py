@@ -20,8 +20,7 @@ install_requires = [
 ]
 tests_require = [
   "nose",
-  "mock",
-  "benchmark"
+  "mock"
 ]
 include_package_data = True
 
