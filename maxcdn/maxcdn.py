@@ -34,10 +34,11 @@ class MaxCDN(object):
         return action(self._get_url(end_point), data=data,
                       headers=self._get_headers(json=True), **kwargs).json()
 
-    def get(self, end_point, **kwargs):
-        return self.client.get(self._get_url(end_point), data=None,
-                               headers=self._get_headers(json=False),
-                               **kwargs).json()
+    def get(self, end_point, data=None, **kwargs):
+        return self._data_request("post", end_point, data=data, **kwargs)
+        #return self.client.get(self._get_url(end_point), data,
+                               #headers=self._get_headers(json=False),
+                               #**kwargs).json()
 
     def patch(self, end_point, data=None, **kwargs):
         return self._data_request("post", end_point, data=data, **kwargs)
